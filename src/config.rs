@@ -1,10 +1,13 @@
+use std::str::FromStr;
+
 use anyhow::Result;
 use serde::Deserialize;
 use config::{Environment, File};
+use tracing::Level;
 
-
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub(crate) struct Config {
+    pub daemon: Daemon,
     pub discord: Discord,
 }
 
@@ -19,7 +22,39 @@ impl Config {
     }
 }
 
-#[derive(Deserialize)]
+impl Validity for Config {
+    fn is_valid(&self) -> Result<()> {
+        self.daemon.is_valid()?;
+        self.discord.is_valid()?;
+
+        Ok(())
+    }
+}
+
+#[derive(Deserialize, Debug)]
+pub(crate) struct Daemon{
+    pub log_level: String,
+}
+
+impl Validity for Daemon {
+    fn is_valid(&self) -> Result<()> {
+        Level::from_str(&self.log_level)?;
+        
+        Ok(())
+    }
+}
+
+#[derive(Deserialize, Debug)]
 pub(crate) struct Discord {
     pub token: String,
+}
+
+impl Validity for Discord {
+    fn is_valid(&self) -> Result<()> {
+        Ok(())
+    }
+}
+
+trait Validity {
+    fn is_valid(&self) -> Result<()>;
 }

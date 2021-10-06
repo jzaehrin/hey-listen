@@ -11,6 +11,8 @@ config = "0.11.0"
 log = "0.4.14"
 tracing = "0.1.28"
 tracing-subscriber = "0.2.24"
+tracing-serde = "0.1"
+songbird = "0.2.0"
 
 [dependencies.tokio]
 version = "1.12.0"
@@ -18,7 +20,7 @@ features = ["macros", "rt-multi-thread"]
 
 [dependencies.serenity]
 version = "0.10.9"
-features = ["framework", "standard_framework", "rustls_backend"]
+features = ["framework", "standard_framework", "rustls_backend", "voice"]
 
 [dependencies.serde]
 version = "1.0.130"
